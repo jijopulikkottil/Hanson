@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 /// The `DynamicObservable` class represents a dynamic property that can be observed for changes using KVO.
 /// When a change is detected with KVO, the observable will publish a `ValueChange` event with the old and new value.
