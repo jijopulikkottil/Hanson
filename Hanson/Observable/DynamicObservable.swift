@@ -65,13 +65,23 @@ public class DynamicObservable<Value>: NSObject, EventPublisher, Bindable {
             return
         }
         
-        target.addObserver(self, forKeyPath: keyPath, options: [.old, .new], context: nil)
+        if let textField = target as? UITextField {
+            textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        } else {
+            target.addObserver(self, forKeyPath: keyPath, options: [.old, .new], context: nil)
+        }
         
         isObserving = true
         
         if shouldRetainTarget {
             retainedTarget = target
         }
+    }
+    
+    @objc
+    func textFieldDidChange(_ textField: UITextField) {
+        let valueChange = ValueChange(oldValue: value, newValue: textField.text  as! Value)
+        publish(valueChange)
     }
     
     private func stopObservation() {
