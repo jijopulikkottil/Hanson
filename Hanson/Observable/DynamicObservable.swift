@@ -65,7 +65,7 @@ public class DynamicObservable<Value>: NSObject, EventPublisher, Bindable {
         guard isObserving == false else {
             return
         }
-        
+        // +20210329 
         if let textField = target as? UITextField {
             textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         } else {
@@ -89,8 +89,12 @@ public class DynamicObservable<Value>: NSObject, EventPublisher, Bindable {
         guard isObserving else {
             return
         }
-        
-        target.removeObserver(self, forKeyPath: keyPath)
+        // +20210329
+        if let textField = target as? UITextField {
+            textField.removeTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        } else {
+            target.removeObserver(self, forKeyPath: keyPath)
+        }
         
         isObserving = false
         retainedTarget = nil
